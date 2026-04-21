@@ -210,69 +210,85 @@ const featuredPost = sortedPosts[0];
 
   /* ── SECTION HEADER ── */
   .section-header {
-    padding: 80px 64px 32px;
-    border-bottom: 1px solid var(--border);
+    padding: 56px 64px 40px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
   }
   .section-header h2 {
     font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-style: italic;
-    font-size: 42px;
+    font-weight: 800;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
   }
 
   /* ── POST GRID ── */
   .post-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: var(--border);
+    border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
+    margin-bottom: 1px;
   }
 
   .post-card {
-    background: var(--surface);
+    background: var(--bg);
     display: flex;
     flex-direction: column;
-    text-decoration: none;
+    cursor: pointer;
     transition: background 0.2s;
+    text-decoration: none;
+    color: inherit;
   }
-  .post-card:hover { background: var(--surface2); }
-
-  .post-wide { grid-column: span 2; }
+  .post-card:hover { background: var(--surface); }
 
   .post-card-image {
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
+    aspect-ratio: 16/10;
     position: relative;
+    overflow: hidden;
+    background: var(--surface2);
   }
 
-  .placeholder {
-    width: 100%; height: 100%;
+  .post-card-image .placeholder {
+    position: absolute; inset: 0;
     background: repeating-linear-gradient(
       -45deg,
-      var(--surface) 0, var(--surface) 10px,
-      var(--surface2) 10px, var(--surface2) 20px
+      var(--surface) 0, var(--surface) 8px,
+      var(--surface2) 8px, var(--surface2) 16px
     );
-    display: flex; align-items: flex-end; justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .placeholder span {
+
+  .post-card-image .placeholder span {
     font-family: 'Space Mono', monospace;
-    font-size: 9px;
+    font-size: 10px;
     color: var(--muted);
-    background: var(--bg);
+    text-align: center;
+    padding: 6px 12px;
     border: 1px solid var(--border);
-    padding: 4px 10px;
-    margin: 12px;
-    opacity: 0.5;
+    background: var(--bg);
   }
 
   .post-card-body {
-    padding: 28px 32px 32px;
+    padding: 24px 24px 28px;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    border-top: 1px solid var(--border);
   }
 
   .post-card-tag {
@@ -285,40 +301,58 @@ const featuredPost = sortedPosts[0];
 
   .post-card-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-style: italic;
-    font-size: 28px;
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.0;
     text-transform: uppercase;
-    line-height: 1.1;
     letter-spacing: -0.01em;
-    color: var(--text);
+    flex: 1;
   }
 
   .post-card-excerpt {
-    font-size: 15px;
+    font-size: 14px;
+    color: var(--muted);
     line-height: 1.6;
-    color: rgba(237,232,224,0.7);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .post-card-meta {
     font-family: 'Space Mono', monospace;
     font-size: 9px;
+    color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--muted);
+    margin-top: 4px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
     display: flex;
-    gap: 10px;
-    margin-top: auto;
+    justify-content: space-between;
+  }
+
+  /* ── WIDE CARD (mod post) ── */
+  .post-wide {
+    grid-column: span 2;
+  }
+
+  .post-wide .post-card-image {
+    aspect-ratio: auto;
+    min-height: 240px;
   }
 
   /* ── ABOUT STRIP ── */
   .about-strip {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 80px 64px;
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 80px;
+    grid-template-columns: 1fr 1fr;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .about-content {
+    padding: 56px 56px;
+    border-right: 1px solid var(--border);
   }
 
   .about-content h3 {
@@ -338,26 +372,34 @@ const featuredPost = sortedPosts[0];
     color: rgba(237,232,224,0.75);
   }
 
+  .about-rig {
+    padding: 56px 56px;
+  }
+
   .about-rig h4 {
     font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     font-style: italic;
     font-size: 24px;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
   }
 
   .spec-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 0;
   }
   .spec-list li {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 12px;
+    padding: 14px 0;
     border-bottom: 1px solid var(--border);
+  }
+  .spec-list li:first-child {
+    padding-top: 0;
   }
   .spec-label {
     font-family: 'Space Mono', monospace;
@@ -374,16 +416,22 @@ const featuredPost = sortedPosts[0];
   }
 
   /* ── RESPONSIVE ── */
+  @media (max-width: 1200px) {
+    .post-grid { grid-template-columns: repeat(2, 1fr); }
+    .post-wide { grid-column: span 2; }
+  }
+
   @media (max-width: 1024px) {
-    .about-strip { grid-template-columns: 1fr; gap: 48px; }
+    .about-strip { grid-template-columns: 1fr; }
+    .about-content { border-right: none; border-bottom: 1px solid var(--border); }
   }
 
   @media (max-width: 768px) {
     .hero-content { padding: 32px 24px; }
     .hero-title { font-size: 42px; }
-    .section-header { padding: 48px 24px 24px; }
+    .section-header { padding: 48px 24px 32px; }
     .post-grid { grid-template-columns: 1fr; }
     .post-wide { grid-column: span 1; }
-    .about-strip { padding: 48px 24px; }
+    .about-content, .about-rig { padding: 40px 24px; }
   }
 </style>
