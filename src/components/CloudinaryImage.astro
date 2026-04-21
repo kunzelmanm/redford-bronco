@@ -1,0 +1,31 @@
+---
+import { CLOUDINARY_CLOUD_NAME } from '../consts';
+
+interface Props {
+  publicId: string;
+  alt: string;
+  width?: number;
+  gravity?: string;
+  class?: string;
+}
+
+const { 
+  publicId, 
+  alt, 
+  width = 1920,
+  gravity = 'auto',
+  class: className = ''
+} = Astro.props;
+
+// Build Cloudinary URL with auto-optimization
+// gravity options: 'auto', 'center', 'north', 'south', 'east', 'west', 'face', 'custom'
+// custom will use coordinates you set in Cloudinary's editor
+const cloudinaryUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/w_${width},c_fill,g_${gravity},q_auto,f_auto/${publicId}`;
+---
+
+<img 
+  src={cloudinaryUrl} 
+  alt={alt} 
+  loading="lazy"
+  class={className}
+/>

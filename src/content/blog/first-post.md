@@ -3,7 +3,8 @@ title: 'First Blood at Sand Hollow'
 description: 'Broke in the new Bronco properly — 35" Goodyears, factory lockers, and no idea what I was getting into.'
 pubDate: 'April 14, 2026'
 category: 'Trail Run'
-heroImage: '../../assets/blog-placeholder-3.jpg'
+heroImage: 'bronco-first-day_g9nryx'
+heroGravity: 'custom'
 ---
 
 Bought the Bronco on a Thursday. Had it on the rocks by Saturday.

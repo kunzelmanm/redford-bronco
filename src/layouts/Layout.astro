@@ -31,7 +31,6 @@ const {
     </a>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
-      <li><a href="/blog">Posts</a></li>
       <li><a href="/about">About</a></li>
     </ul>
     <a class="nav-cta" href="mailto:mike@redfordbronco.com">Contact</a>
@@ -94,7 +93,7 @@ const {
     align-items: center;
     justify-content: space-between;
     padding: 0 32px;
-    height: 56px;
+    height: 72px;
   }
 
   .nav-logo {
@@ -106,13 +105,13 @@ const {
   }
   .nav-logo-spec {
     font-family: 'Space Mono', monospace;
-    font-size: 7.5px;
+    font-size: 8.5px;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--muted);
   }
   .nav-logo-rule {
-    height: 1.5px;
+    height: 2px;
     background: var(--red);
     width: 100%;
   }
@@ -120,7 +119,7 @@ const {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-style: italic;
-    font-size: 26px;
+    font-size: 32px;
     text-transform: uppercase;
     letter-spacing: -0.01em;
     line-height: 1;
@@ -129,7 +128,7 @@ const {
   .nav-logo-name .white { color: var(--text); }
   .nav-logo-sub {
     font-family: 'Space Mono', monospace;
-    font-size: 7px;
+    font-size: 8px;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--muted);
@@ -138,15 +137,15 @@ const {
 
   .logo-full {
     border: 1px solid var(--border);
-    padding: 14px 20px;
+    padding: 20px 28px;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 6px;
     text-decoration: none;
   }
   .logo-full-spec {
     font-family: 'Space Mono', monospace;
-    font-size: 8px;
+    font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--muted);
@@ -157,7 +156,7 @@ const {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
     font-style: italic;
-    font-size: 48px;
+    font-size: 42px;
     text-transform: uppercase;
     letter-spacing: -0.01em;
     line-height: 0.92;
@@ -166,7 +165,7 @@ const {
   .logo-full-name .white { color: var(--text); }
   .logo-full-sub {
     font-family: 'Space Mono', monospace;
-    font-size: 8px;
+    font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.18em;
     color: var(--muted);
@@ -203,20 +202,23 @@ const {
 
   /* ── FOOTER ── */
   footer {
-    background: var(--surface);
+    background: var(--bg);
     border-top: 1px solid var(--border);
-    padding: 64px 32px 48px;
-    display: flex;
-    flex-direction: column;
+    padding: 64px 64px 48px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 16px;
-    text-align: center;
+    gap: 48px;
   }
   footer p {
     font-family: 'Space Mono', monospace;
     font-size: 11px;
     color: var(--muted);
     letter-spacing: 0.08em;
+    text-align: center;
+  }
+  footer p:last-child {
+    text-align: right;
   }
 
   /* ── UTILITIES ── */

@@ -1,21 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import CloudinaryImage from '../components/CloudinaryImage.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts.sort((a, b) => 
   new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
-const latestPosts = sortedPosts.slice(0, 5);
 const featuredPost = sortedPosts[0];
+const latestPosts = sortedPosts.slice(1, 6); // Skip the featured post, take next 5
 ---
 
 <Layout>
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-placeholder">
-      <span>Photo coming soon — Sand Hollow State Park</span>
-    </div>
+    {featuredPost.data.heroImage ? (
+      <CloudinaryImage publicId={featuredPost.data.heroImage} alt={featuredPost.data.title} gravity={featuredPost.data.heroGravity} class="hero-bg" />
+    ) : (
+      <div class="hero-placeholder">
+        <span>Photo coming soon — Sand Hollow State Park</span>
+      </div>
+    )}
     <div class="hero-content">
       <span class="tag">Trail Run — Featured</span>
       <h1 class="hero-title">{featuredPost.data.title}</h1>
@@ -43,7 +48,11 @@ const featuredPost = sortedPosts[0];
     {latestPosts.map((post, index) => (
       <a class={`post-card ${index === 1 ? 'post-wide' : ''}`} href={`/blog/${post.id}`}>
         <div class="post-card-image">
-          <div class="placeholder"><span>photo — {post.data.title}</span></div>
+          {post.data.heroImage ? (
+            <CloudinaryImage publicId={post.data.heroImage} alt={post.data.title} width={800} />
+          ) : (
+            <div class="placeholder"><span>photo — {post.data.title}</span></div>
+          )}
         </div>
         <div class="post-card-body">
           <span class="post-card-tag">{post.data.category || 'Post'}</span>
@@ -105,9 +114,9 @@ const featuredPost = sortedPosts[0];
   /* ── HERO ── */
   .hero {
     position: relative;
-    height: calc(100svh - 56px);
+    height: calc(100svh - 72px);
     min-height: 520px;
-    max-height: 900px;
+    max-height: 650px;
     overflow: hidden;
     background: var(--surface2);
   }
@@ -126,6 +135,15 @@ const featuredPost = sortedPosts[0];
     font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted);
     border: 1px solid var(--border); background: var(--bg); padding: 6px 12px;
     margin: 16px 16px 0 0; opacity: 0.5; z-index: 3; align-self: flex-start;
+  }
+
+  .hero :global(.hero-bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
   }
 
   .hero::after {
@@ -258,6 +276,13 @@ const featuredPost = sortedPosts[0];
     position: relative;
     overflow: hidden;
     background: var(--surface2);
+  }
+
+  .post-card-image :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .post-card-image .placeholder {
