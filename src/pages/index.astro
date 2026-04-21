@@ -1,49 +1,389 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+);
+const latestPosts = sortedPosts.slice(0, 5);
+const featuredPost = sortedPosts[0];
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Layout>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-placeholder">
+      <span>Photo coming soon — Sand Hollow State Park</span>
+    </div>
+    <div class="hero-content">
+      <span class="tag">Trail Run — Featured</span>
+      <h1 class="hero-title">{featuredPost.data.title}</h1>
+      <p class="hero-excerpt">{featuredPost.data.description}</p>
+      <div class="hero-meta">
+        <span>{new Date(featuredPost.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <span>·</span>
+        <span>Hurricane, UT</span>
+        <span>·</span>
+        <span>6 min read</span>
+      </div>
+      <a class="btn-read" href={`/blog/${featuredPost.slug}`}>
+        Read the Post
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h12M8 3l5 4-5 4"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- LATEST POSTS -->
+  <div class="section-header">
+    <h2>Latest Posts</h2>
+  </div>
+
+  <div class="post-grid">
+    {latestPosts.map((post, index) => (
+      <a class={`post-card ${index === 1 ? 'post-wide' : ''}`} href={`/blog/${post.slug}`}>
+        <div class="post-card-image">
+          <div class="placeholder"><span>photo — {post.data.title}</span></div>
+        </div>
+        <div class="post-card-body">
+          <span class="post-card-tag">Trail Run</span>
+          <h3 class="post-card-title">{post.data.title}</h3>
+          <p class="post-card-excerpt">{post.data.description}</p>
+          <div class="post-card-meta">
+            <span>{new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            <span>6 min</span>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <!-- ABOUT THE RIG -->
+  <div class="about-strip">
+    <div class="about-content">
+      <span class="tag">About this blog</span>
+      <h3>Built for the<br><em>Trail,</em><br>Written on the Road</h3>
+      <p>Redford Bronco is a personal log of adventures in and around Hurricane, Utah — trail runs, day trips, and the occasional late-night mod session in the driveway. No sponsored posts. No expertise claimed. Just one Bronco and the Southern Utah desert.</p>
+    </div>
+    <div class="about-rig">
+      <h4>The Rig</h4>
+      <ul class="spec-list">
+        <li>
+          <span class="spec-label">Year / Model</span>
+          <span class="spec-val">2025 Ford Bronco</span>
+        </li>
+        <li>
+          <span class="spec-label">Trim</span>
+          <span class="spec-val">Badlands</span>
+        </li>
+        <li>
+          <span class="spec-label">Package</span>
+          <span class="spec-val">Sasquatch</span>
+        </li>
+        <li>
+          <span class="spec-label">Color</span>
+          <span class="spec-val">Ruby Red Metallic</span>
+        </li>
+        <li>
+          <span class="spec-label">Engine</span>
+          <span class="spec-val">2.7L EcoBoost V6</span>
+        </li>
+        <li>
+          <span class="spec-label">Tires</span>
+          <span class="spec-val">35" Goodyear MTR</span>
+        </li>
+        <li>
+          <span class="spec-label">Base</span>
+          <span class="spec-val">Hurricane, UT</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: calc(100svh - 56px);
+    min-height: 520px;
+    max-height: 900px;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+
+  .hero-placeholder {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--surface) 0, var(--surface) 10px,
+      var(--surface2) 10px, var(--surface2) 20px
+    );
+    display: flex; align-items: flex-start; justify-content: flex-end;
+    z-index: 0;
+  }
+  .hero-placeholder span {
+    font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted);
+    border: 1px solid var(--border); background: var(--bg); padding: 6px 12px;
+    margin: 16px 16px 0 0; opacity: 0.5; z-index: 3; align-self: flex-start;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top,  rgba(10,8,7,0.96) 0%, rgba(10,8,7,0.7) 45%, rgba(10,8,7,0.3) 70%, transparent 90%),
+      linear-gradient(to right, rgba(10,8,7,0.5) 0%, transparent 55%);
+    z-index: 1;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: var(--red); z-index: 3;
+  }
+
+  .hero-content {
+    position: absolute; bottom: 0; left: 0;
+    padding: 56px 64px;
+    z-index: 2;
+    max-width: 780px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 64px;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin: 14px 0 20px;
+  }
+  .hero-title em {
+    color: var(--red);
+    font-style: italic;
+  }
+
+  .hero-excerpt {
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(237,232,224,0.85);
+    max-width: 560px;
+    margin-bottom: 16px;
+  }
+
+  .hero-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .btn-read {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    text-decoration: none;
+    border: 1.5px solid var(--red);
+    padding: 12px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    transition: all 0.25s;
+  }
+  .btn-read svg { width: 14px; height: 14px; }
+  .btn-read:hover {
+    background: var(--red);
+    color: white;
+    transform: translateX(2px);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    padding: 80px 64px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 42px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── POST GRID ── */
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-card {
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .post-card:hover { background: var(--surface2); }
+
+  .post-wide { grid-column: span 2; }
+
+  .post-card-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .placeholder {
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--surface) 0, var(--surface) 10px,
+      var(--surface2) 10px, var(--surface2) 20px
+    );
+    display: flex; align-items: flex-end; justify-content: flex-end;
+  }
+  .placeholder span {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    margin: 12px;
+    opacity: 0.5;
+  }
+
+  .post-card-body {
+    padding: 28px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .post-card-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--red);
+  }
+
+  .post-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 28px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .post-card-excerpt {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(237,232,224,0.7);
+  }
+
+  .post-card-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+  }
+
+  /* ── ABOUT STRIP ── */
+  .about-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 64px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+  }
+
+  .about-content h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 48px;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin: 16px 0 24px;
+  }
+  .about-content h3 em { color: var(--red); }
+  .about-content p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(237,232,224,0.75);
+  }
+
+  .about-rig h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .spec-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .spec-list li {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .spec-val {
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .about-strip { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  @media (max-width: 768px) {
+    .hero-content { padding: 32px 24px; }
+    .hero-title { font-size: 42px; }
+    .section-header { padding: 48px 24px 24px; }
+    .post-grid { grid-template-columns: 1fr; }
+    .post-wide { grid-column: span 1; }
+    .about-strip { padding: 48px 24px; }
+  }
+</style>
