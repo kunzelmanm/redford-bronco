@@ -27,7 +27,7 @@ const featuredPost = sortedPosts[0];
         <span>·</span>
         <span>6 min read</span>
       </div>
-      <a class="btn-read" href={`/blog/${featuredPost.slug}`}>
+      <a class="btn-read" href={`/blog/${featuredPost.id}`}>
         Read the Post
         <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h12M8 3l5 4-5 4"/></svg>
       </a>
@@ -41,12 +41,12 @@ const featuredPost = sortedPosts[0];
 
   <div class="post-grid">
     {latestPosts.map((post, index) => (
-      <a class={`post-card ${index === 1 ? 'post-wide' : ''}`} href={`/blog/${post.slug}`}>
+      <a class={`post-card ${index === 1 ? 'post-wide' : ''}`} href={`/blog/${post.id}`}>
         <div class="post-card-image">
           <div class="placeholder"><span>photo — {post.data.title}</span></div>
         </div>
         <div class="post-card-body">
-          <span class="post-card-tag">Trail Run</span>
+          <span class="post-card-tag">{post.data.category || 'Post'}</span>
           <h3 class="post-card-title">{post.data.title}</h3>
           <p class="post-card-excerpt">{post.data.description}</p>
           <div class="post-card-meta">

@@ -1,86 +1,309 @@
 ---
-import { Image } from 'astro:assets';
+import Layout from './Layout.astro';
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import { getCollection } from 'astro:content';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, category, heroImage } = Astro.props;
+
+// Get all posts for prev/next navigation
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+);
+const currentIndex = sortedPosts.findIndex(post => post.data.title === title);
+const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+<Layout title={title} description={description}>
+  <!-- HERO IMAGE -->
+  <section class="post-hero">
+    <div class="placeholder">
+      <span>Photo placeholder — {title}</span>
+    </div>
+    <!-- Red bar accent on left -->
+  </section>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+  <!-- POST HEADER -->
+  <div class="post-header">
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/blog">Blog</a>
+      <span>/</span>
+      <span>{title}</span>
+    </div>
+
+    {category && (
+      <div class="post-tag">{category}</div>
+    )}
+
+    <h1 class="post-title" set:html={title.replace(/\s(\S+)$/,' <em>$1</em>')} />
+
+    <div class="post-meta-bar">
+      <div class="meta-item">
+        <span>Published</span>
+        <strong>{new Date(pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</strong>
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <span>Location</span>
+        <strong>Hurricane, UT</strong>
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-item">
+        <span>Read Time</span>
+        <strong>6 min</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE BODY -->
+  <article class="post-body">
+    <slot />
+  </article>
+
+  <!-- POST NAVIGATION -->
+  {(prevPost || nextPost) && (
+    <nav class="post-nav">
+      {prevPost ? (
+        <a href={`/blog/${prevPost.id}`} class="prev">
+          <div class="nav-dir">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M8 2L4 6l4 4"/>
+            </svg>
+            <span>Previous</span>
+          </div>
+          <div class="nav-title">{prevPost.data.title}</div>
+          <div class="nav-tag">{prevPost.data.category || 'Post'}</div>
+        </a>
+      ) : (
+        <div class="prev"></div>
+      )}
+
+      {nextPost ? (
+        <a href={`/blog/${nextPost.id}`} class="next">
+          <div class="nav-dir">
+            <span>Next</span>
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 2l4 4-4 4"/>
+            </svg>
+          </div>
+          <div class="nav-title">{nextPost.data.title}</div>
+          <div class="nav-tag">{nextPost.data.category || 'Post'}</div>
+        </a>
+      ) : (
+        <div class="next"></div>
+      )}
+    </nav>
+  )}
+</Layout>
+
+<style>
+  /* ── HERO IMAGE ── */
+  .post-hero {
+    position: relative;
+    height: 520px;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+  .post-hero .placeholder {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--surface) 0, var(--surface) 10px,
+      var(--surface2) 10px, var(--surface2) 20px
+    );
+    display: flex; align-items: center; justify-content: center;
+  }
+  .post-hero .placeholder span {
+    font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted);
+    border: 1px solid var(--border); background: var(--bg); padding: 8px 16px;
+  }
+  /* gradient fade at bottom */
+  .post-hero::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+    background: linear-gradient(to top, var(--bg), transparent);
+  }
+  /* red bar left */
+  .post-hero::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%; background: var(--red); z-index: 2;
+  }
+
+  /* ── POST HEADER ── */
+  .post-header {
+    max-width: 780px;
+    margin: -60px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .breadcrumb {
+    font-family: 'Space Mono', monospace; font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--red); }
+  .breadcrumb span { color: var(--border); }
+
+  .post-tag {
+    font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--red);
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
+  }
+  .post-tag::before {
+    content: ''; display: block; width: 20px; height: 1px; background: var(--red);
+  }
+
+  .post-title {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: clamp(52px, 7vw, 88px); line-height: 0.93;
+    text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 28px;
+  }
+  .post-title :global(em) { font-style: italic; color: var(--red); }
+
+  .post-meta-bar {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .post-meta-bar .meta-item {
+    font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .post-meta-bar .meta-item strong {
+    font-size: 12px; color: var(--text); font-weight: 700; letter-spacing: 0.04em;
+  }
+  .meta-divider { width: 1px; height: 36px; background: var(--border); }
+
+  /* ── ARTICLE BODY ── */
+  .post-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .post-body :global(p) {
+    font-size: 17px; line-height: 1.8; color: var(--text);
+    margin-bottom: 24px;
+  }
+  .post-body :global(p:first-child::first-letter) {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 72px; line-height: 0.8; float: left;
+    margin: 6px 12px 0 0; color: var(--red); text-transform: uppercase;
+  }
+
+  .post-body :global(h2) {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+    font-size: 38px; text-transform: uppercase; letter-spacing: -0.01em;
+    margin: 48px 0 16px; line-height: 1.0;
+  }
+  .post-body :global(h3) {
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--red); margin: 36px 0 12px;
+  }
+
+  .post-body :global(ul), .post-body :global(ol) {
+    margin: 24px 0;
+    padding-left: 32px;
+  }
+  .post-body :global(li) {
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 3px solid var(--red);
+    padding: 20px 28px;
+    margin: 40px 0;
+    background: var(--surface);
+  }
+  .post-body :global(blockquote p) {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-style: italic;
+    font-size: 28px; line-height: 1.2; color: var(--text); margin: 0;
+  }
+  .post-body :global(blockquote p::first-letter) { 
+    all: unset; font-size: inherit; float: none; color: inherit; 
+  }
+
+  .post-body :global(img) {
+    width: 100%;
+    margin: 40px 0;
+    display: block;
+  }
+
+  .post-body :global(code) {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--red);
+  }
+
+  .post-body :global(pre) {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin: 32px 0;
+    overflow-x: auto;
+  }
+  .post-body :global(pre code) {
+    background: none;
+    padding: 0;
+    color: var(--text);
+  }
+
+  /* ── POST NAV ── */
+  .post-nav {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: relative;
+    z-index: 0;
+  }
+  .post-nav a {
+    padding: 32px 40px; text-decoration: none; color: inherit;
+    transition: background 0.2s; display: flex; flex-direction: column; gap: 8px;
+  }
+  .post-nav a:hover { background: var(--surface2); }
+  .post-nav .prev { border-right: 1px solid var(--border); }
+  .post-nav .next { text-align: right; }
+  .post-nav .nav-dir {
+    font-family: 'Space Mono', monospace; font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--red);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-nav .next .nav-dir { justify-content: flex-end; }
+  .post-nav .nav-dir svg { width: 12px; height: 12px; }
+  .post-nav .nav-title {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 24px;
+    text-transform: uppercase; line-height: 1.0;
+  }
+  .post-nav .nav-tag {
+    font-family: 'Space Mono', monospace; font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .post-hero { height: 360px; }
+    .post-header { margin-top: -40px; }
+    .post-title { font-size: 42px; }
+    .post-meta-bar { gap: 16px; }
+    .post-body { padding: 0 16px 60px; }
+    .post-body :global(p:first-child::first-letter) { font-size: 52px; }
+    .post-nav { grid-template-columns: 1fr; }
+    .post-nav .prev { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
