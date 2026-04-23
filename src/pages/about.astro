@@ -1,63 +1,133 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import Layout from '../layouts/Layout.astro';
+import CloudinaryImage from '../components/CloudinaryImage.astro';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<Layout title="About" description="A Bronco blog from Hurricane, Utah" currentPage="/about">
+  <!-- HERO IMAGE -->
+  <section class="about-hero">
+    <CloudinaryImage 
+      publicId="canyonlands_mapksj"
+      alt="About Redford Bronco" 
+      gravity="custom"
+      class="hero-img" 
+    />
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span>About</span>
+    </div>
+  </section>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+  <!-- ABOUT CONTENT -->
+  <article class="about-content">
+    <h1>About Redford Bronco</h1>
+    
+    <p>This is a personal blog documenting adventures in and around Hurricane, Utah with our 2025 Ford
+    Bronco Badlands. We don't know what we're doing.</p>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+    <p>Redford came about because the Bronco Off-Roadeo site wanted a 'nickname' for the vehicle. There seemed to be
+    dozens of 'Clifford' ones, because that's the first thing I thought of. After kicking around some ideas, 'Redford' came up
+    and that's what we're going with.</p>
+    
+    <p>No sponsored content. No affiliate links. Just one Bronco, Southern Utah trails, and the occasional mods in the driveway.</p>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+    <h2>The Rig</h2>
+    
+    <p>2025 Ford Bronco Badlands Sasquatch in Ruby Red Metallic with color-matched hardtop. HOSS 3.0 suspension, 35-inch Goodyear Territory MTs, and Raptor running boards.</p>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
+    <h2>The Mission</h2>
+    
+    <p>Document every trail we try, every interesting mod, every mistake. Build a resource for other Bronco owners in the Southwest who want to know what actually works on red rock and sand.</p>
+  </article>
 </Layout>
+
+<style>
+  .about-hero {
+    position: relative;
+    height: 420px;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+
+  .about-hero :global(.hero-img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .breadcrumb {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    z-index: 2;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(10,8,7,0.8);
+    backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border: 1px solid rgba(237,232,224,0.2);
+  }
+  
+  .breadcrumb a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .breadcrumb a:hover {
+    color: var(--red);
+  }
+  
+  .breadcrumb span {
+    color: var(--muted);
+  }
+
+  .about-content {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 64px 24px 80px;
+  }
+
+  .about-content h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(52px, 7vw, 72px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+  }
+
+  .about-content h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 48px 0 16px;
+    color: var(--red);
+  }
+
+  .about-content p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .about-hero {
+      height: 320px;
+    }
+    .about-content {
+      padding: 48px 16px 60px;
+    }
+  }
+</style>

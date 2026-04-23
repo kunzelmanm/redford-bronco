@@ -2,11 +2,13 @@
 interface Props {
   title?: string;
   description?: string;
+  currentPage?: string;
 }
 
 const { 
   title = 'Redford Bronco',
-  description = 'A Bronco blog from Hurricane, Utah'
+  description = 'A Bronco blog from Hurricane, Utah',
+  currentPage = '/'
 } = Astro.props;
 ---
 
@@ -30,8 +32,8 @@ const {
       <span class="nav-logo-sub">A Bronco Blog</span>
     </a>
     <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/about">About</a></li>
+      <li><a href="/" class={currentPage === '/' ? 'active' : ''}>Home</a></li>
+      <li><a href="/about" class={currentPage === '/about' ? 'active' : ''}>About</a></li>
     </ul>
     <a class="nav-cta" href="mailto:mike@redfordbronco.com">Contact</a>
   </nav>
@@ -186,6 +188,10 @@ const {
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { 
+    color: var(--red); 
+    font-weight: 700;
+  }
 
   .nav-cta {
     font-family: 'Space Mono', monospace;

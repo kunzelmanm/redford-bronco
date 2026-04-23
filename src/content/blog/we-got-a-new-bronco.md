@@ -1,7 +1,7 @@
 ---
 title: 'We Got a New Bronco'
 description: '2025 Ford Bronco Badlands Sasquatch in Ruby Red — HOSS 3.0, 35s, and everything needed for Southern Utah trails.'
-pubDate: 'April 21, 2026'
+pubDate: 'April 11, 2026'
 category: 'Mods & Builds'
 heroImage: 'bronco-first-day_g9nryx'
 heroGravity: 'custom'
