@@ -1,6 +1,4 @@
 ---
-// Image gallery component - multiple images in a row
-// Each image is clickable for lightbox
 interface ImageItem {
   publicId: string;
   alt: string;
@@ -10,30 +8,34 @@ interface ImageItem {
 interface Props {
   images: ImageItem[];
   columns?: 2 | 3 | 4;
+  galleryId?: string;
 }
 
-const { images, columns = 3 } = Astro.props;
+const { images, columns = 3, galleryId = `gallery-${Math.random().toString(36).slice(2, 8)}` } = Astro.props;
 
 const CLOUDINARY_CLOUD_NAME = 'dwvpdrvq9';
 
-// Generate image URLs
 const imageData = images.map(img => ({
   ...img,
   thumbUrl: `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/w_600,q_auto,f_auto/${img.publicId}`,
-  fullUrl: `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/w_1600,q_auto,f_auto/${img.publicId}`
+  fullUrl: `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/w_1600,q_auto,f_auto/${img.publicId}`,
 }));
 ---
 
-<div class={`image-gallery cols-${columns}`}>
+<div id={galleryId} data-gallery-id={galleryId} class={`image-gallery cols-${columns}`}>
   {imageData.map(img => (
     <div class="gallery-item">
-      <img 
-        src={img.thumbUrl} 
-        alt={img.alt}
-        class="gallery-thumb"
-        data-full={img.fullUrl}
-      />
-      {img.caption && <p class="gallery-caption">{img.caption}</p>}
+      <a
+        href={img.fullUrl}
+        target="_blank"
+      >
+        <img
+          src={img.thumbUrl}
+          alt={img.alt}
+          class="gallery-thumb"
+        />
+      </a>
+      {img.caption && <div class="gallery-caption">{img.caption}</div>}
     </div>
   ))}
 </div>
@@ -44,60 +46,52 @@ const imageData = images.map(img => ({
     gap: 16px;
     margin: 40px 0;
   }
-  
-  .cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .cols-3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .cols-4 {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
+
+  .cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cols-4 { grid-template-columns: repeat(4, 1fr); }
+
   .gallery-item {
     display: flex;
     flex-direction: column;
   }
-  
+
+  .gallery-item a {
+    display: block;
+    cursor: zoom-in;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .gallery-item a:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+
   .gallery-thumb {
     width: 100%;
     aspect-ratio: 4/3;
     object-fit: cover;
     border-radius: 4px;
     border: 1px solid var(--border);
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
   }
-  
-  .gallery-thumb:hover {
-    opacity: 0.9;
-    transform: scale(1.02);
-  }
-  
+
   .gallery-caption {
     font-family: 'Space Mono', monospace;
-    font-size: 10px;
+    font-size: 13px;
     color: var(--muted);
     text-align: center;
-    margin: 6px 0 0 0;
+    margin: 4px 0 0 0;
     font-style: italic;
-    line-height: 1.3;
+    line-height: 1.2;
   }
-  
+
   @media (max-width: 768px) {
     .image-gallery {
       grid-template-columns: repeat(2, 1fr) !important;
       gap: 12px;
     }
-    
-    .cols-4 {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
-  
+
   @media (max-width: 480px) {
     .image-gallery {
       grid-template-columns: 1fr !important;
@@ -106,47 +100,26 @@ const imageData = images.map(img => ({
 </style>
 
 <script>
-  // Lightbox functionality for gallery images
-  document.addEventListener('DOMContentLoaded', () => {
-    const images = document.querySelectorAll('.gallery-thumb');
-    
-    images.forEach(img => {
-      img.addEventListener('click', (e) => {
-        const target = e.target as HTMLImageElement;
-        const fullUrl = target.dataset.full;
-        if (!fullUrl) return;
-        
-        // Create lightbox overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'lightbox-overlay';
-        overlay.innerHTML = `
-          <div class="lightbox-container">
-            <img src="${fullUrl}" alt="${target.alt}" />
-            <button class="lightbox-close">✕</button>
-          </div>
-        `;
-        
-        document.body.appendChild(overlay);
-        document.body.style.overflow = 'hidden';
-        
-        // Close on click
-        overlay.addEventListener('click', (e) => {
-          if (e.target === overlay || (e.target as HTMLElement).className === 'lightbox-close') {
-            document.body.removeChild(overlay);
-            document.body.style.overflow = '';
-          }
-        });
-        
-        // Close on escape
-        const escHandler = (e: KeyboardEvent) => {
-          if (e.key === 'Escape') {
-            document.body.removeChild(overlay);
-            document.body.style.overflow = '';
-            document.removeEventListener('keydown', escHandler);
-          }
-        };
-        document.addEventListener('keydown', escHandler);
-      });
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+  document.querySelectorAll<HTMLElement>('[data-gallery-id]').forEach(el => {
+    const id = el.dataset.galleryId!;
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: `#${id}`,
+      children: 'a',
+      pswpModule: () => import('photoswipe'),
     });
+
+    lightbox.addFilter('itemData', (itemData) => {
+      const img = itemData.element?.querySelector('img') as HTMLImageElement | null;
+      if (img?.complete && img.naturalWidth) {
+        const scale = 1600 / img.naturalWidth;
+        itemData.w = 1600;
+        itemData.h = Math.round(img.naturalHeight * scale);
+      }
+      return itemData;
+    });
+
+    lightbox.init();
   });
 </script>
