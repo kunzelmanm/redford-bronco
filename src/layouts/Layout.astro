@@ -51,7 +51,6 @@ const {
       <span class="logo-full-sub">A Bronco Blog</span>
     </a>
     <p>Hurricane, Utah &nbsp;·&nbsp; Est. 2025</p>
-    <p>No trail left unexplored</p>
   </footer>
 </body>
 </html>
@@ -211,20 +210,17 @@ const {
     background: var(--bg);
     border-top: 1px solid var(--border);
     padding: 64px 64px 48px;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+    display: flex;
     align-items: center;
-    gap: 48px;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
   }
   footer p {
     font-family: 'Space Mono', monospace;
     font-size: 11px;
     color: var(--muted);
     letter-spacing: 0.08em;
-    text-align: center;
-  }
-  footer p:last-child {
-    text-align: right;
   }
 
   /* ── UTILITIES ── */
@@ -247,9 +243,16 @@ const {
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
-    nav { padding: 0 16px; height: 48px; }
+    nav { padding: 10px 16px; height: auto; }
     .nav-logo-name { font-size: 22px; }
     .nav-links { gap: 16px; }
     .nav-links a { font-size: 10px; }
+
+    footer {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 40px 24px 32px;
+      gap: 20px;
+    }
   }
 </style>
