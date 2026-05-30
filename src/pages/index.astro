@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import CloudinaryImage from '../components/CloudinaryImage.astro';
 import { getCollection } from 'astro:content';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => 
   new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
 );
@@ -44,7 +44,7 @@ const latestPosts = sortedPosts.slice(1, 6); // Skip the featured post, take nex
 
   <!-- LATEST POSTS -->
   <div class="section-header">
-    <h2>Latest Posts</h2>
+    <h2>More Posts</h2>
   </div>
 
   <div class="post-grid">

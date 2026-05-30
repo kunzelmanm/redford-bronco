@@ -15,6 +15,7 @@ const blog = defineCollection({
 			heroImage: z.string().optional(), // Cloudinary public ID
 			heroGravity: z.string().optional(), // Cloudinary gravity (auto, center, north, south, etc.)
 		category: z.string().optional(),
+		draft: z.boolean().optional(),
 		}),
 });
 

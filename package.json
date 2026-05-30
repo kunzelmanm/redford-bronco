@@ -18,5 +18,8 @@
     "astro": "^6.2.1",
     "photoswipe": "^5.4.4",
     "sharp": "^0.34.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3"
   }
 }

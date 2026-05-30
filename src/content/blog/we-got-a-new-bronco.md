@@ -12,7 +12,7 @@ We went to just look, I swear, and ended up buying. I'd been wanting the Heritag
 
 **2025 Ford Bronco Badlands Sasquatch**
 
-The Sasquatch package was non-negotiable. 35-inch Goodyear Territory MT tires on beadlock-capable wheels, 4.70 gears, electronic locking front and rear differentials. This thing came with more stuff than we need for what we're planning.
+The Sasquatch package was non-negotiable. 35-inch Goodyear Territory MT tires, 4.70 gears, electronic locking front and rear differentials. This thing came with more stuff than we need for what we're planning.
 
 But we didn't stop there.
 
