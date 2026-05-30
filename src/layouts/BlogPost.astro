@@ -7,7 +7,7 @@ import { getCollection } from 'astro:content';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, category, heroImage, heroGravity } = Astro.props;
+const { title, description, pubDate, updatedDate, category, heroImage, heroGravity } = Astro.props;
 
 // Get all posts for prev/next navigation
 const allPosts = await getCollection('blog');
@@ -19,7 +19,7 @@ const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentInde
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} heroImage={heroImage} pubDate={pubDate} updatedDate={updatedDate} category={category} isArticle={true}>
   <!-- HERO IMAGE -->
   <section class="post-hero">
     {heroImage ? (

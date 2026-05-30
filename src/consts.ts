@@ -4,3 +4,5 @@
 export const SITE_TITLE = 'Redford Bronco';
 export const SITE_DESCRIPTION = 'A Bronco blog from Hurricane, Utah';
 export const CLOUDINARY_CLOUD_NAME = 'dwvpdrvq9';
+export const AUTHOR_NAME = 'Mike Kunzelman';
+export const SITE_URL = 'https://redfordbronco.com';

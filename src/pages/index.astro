@@ -11,7 +11,10 @@ const featuredPost = sortedPosts[0];
 const latestPosts = sortedPosts.slice(1, 6); // Skip the featured post, take next 5
 ---
 
-<Layout>
+<Layout
+  title="Redford Bronco — A Ford Bronco Blog from Hurricane, Utah"
+  description="Trail runs, day trips, and off-road adventures in a 2025 Ford Bronco Badlands Sasquatch. Based in Hurricane, Utah."
+>
   <!-- HERO -->
   <section class="hero">
     {featuredPost.data.heroImage ? (
