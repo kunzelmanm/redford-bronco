@@ -49,7 +49,7 @@ const latestPosts = sortedPosts.slice(1, 6); // Skip the featured post, take nex
 
   <div class="post-grid">
     {latestPosts.map((post, index) => (
-      <a class={`post-card ${index === 1 ? 'post-wide' : ''}`} href={`/blog/${post.id}`}>
+      <a class={`post-card ${index === 0 ? 'post-wide' : ''}`} href={`/blog/${post.id}`}>
         <div class="post-card-image">
           {post.data.heroImage ? (
             <CloudinaryImage publicId={post.data.heroImage} alt={post.data.title} width={800} />
